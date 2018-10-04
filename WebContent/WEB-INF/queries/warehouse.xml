@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="warehouse">
+<Cube name="Warehouse">
+	<!-- 事实表(fact table) -->
+	<Table name="inventory_fact_1997" />
+	<!-- 仓库维 -->
+	<Dimension name="仓库" foreignKey="warehouse_id">
+		<Hierarchy hasAll="true" allMemberName="所有仓库" primaryKey="warehouse_id" primaryKeyTable="warehouse">
+			<join leftKey="warehouse_class_id" rightKey="warehouse_class_id">
+				<Table name="warehouse" />
+				<Table name="warehouse_class"></Table>
+			</join>
+			<Level name="warehouse_class_id" column="description"
+				  table="warehouse_class" />
+			<Level name="warehouse_country" column="warehouse_country"
+				  table="warehouse" />
+			<Level name="warehouse_state_province" column="warehouse_state_province"
+				  table="warehouse" />
+			<Level name="warehouse_city" column="warehouse_city"
+				  table="warehouse" />
+
+		</Hierarchy>
+	</Dimension>
+	<!-- 商场维 -->
+	<Dimension name="商场地域" foreignKey="store_id">
+		<Hierarchy hasAll="true" allMemberName="所有商场" primaryKey="store_id">
+			<Table name="store"></Table>
+			<Level name="store_country" column="store_country"></Level>
+			<Level name="store_state" column="store_state"></Level>
+			<Level name="store_city" column="store_city"></Level>
+		</Hierarchy>
+	</Dimension>
+	<!-- 时间维 -->
+	<Dimension name="时间" foreignKey="time_id">
+		<Hierarchy hasAll="true" allMemberName="所有时间" primaryKey="time_id">
+			<Table name="time_by_day"></Table>
+			<Level name="the_year" column="the_year"></Level>			
+			<Level name="quarter" column="quarter"></Level>
+			<Level name="month_of_year" column="month_of_year"></Level>
+			<Level name="the_date" column="the_date"></Level>
+		</Hierarchy>
+	</Dimension>
+	<Measure name="仓库销售" column="warehouse_sales" aggregator="sum" datatype="Numeric" />
+	<Measure name="仓库支出" column="warehouse_cost" aggregator="sum" datatype="Numeric" />
+	<Measure name="仓库进货" column="supply_time" aggregator="sum" datatype="Numeric"/>
+</Cube>
+</Schema>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema name="sales">
+<Cube name="Sales">
+	<!-- 事实表(fact table) -->
+	<Table name="sales_fact_1997" />
+	<!-- 客户维 -->
+	<Dimension name="客户" foreignKey="customer_id">
+		<Hierarchy hasAll="true" allMemberName="所有客户" primaryKey="customer_id">
+			<Table name="customer"></Table>
+			<Level name="country" column="country"></Level>
+			<Level name="state_province" column="state_province"></Level>
+			<Level name="city" column="city"></Level>
+		</Hierarchy>
+	</Dimension>
+	<!-- 产品维 -->
+	<Dimension name="产品类别" foreignKey="product_id">
+		<Hierarchy hasAll="true" allMemberName="所有产品" primaryKey="product_id" primaryKeyTable="product">
+			<join leftKey="product_class_id" rightKey="product_class_id">
+				<Table name="product" />
+				<Table name="product_class"></Table>
+			</join>
+			<Level name="product_family" column="product_family"
+				  table="product_class" />
+			<Level name="product_department" column="product_department"
+				  table="product_class" />
+			<Level name="product_category" column="product_category"
+				  table="product_class" />
+			<Level name="product_subcategory" column="product_subcategory"
+				  table="product_class" />
+			<Level name="product_id" column="product_id" nameColumn="product_name"
+				  table="product" />
+		</Hierarchy>
+	</Dimension>
+	<!-- 推广维 -->
+	<Dimension name="产品推广" foreignKey="promotion_id">
+		<Hierarchy hasAll="true" allMemberName="所有推广" primaryKey="promotion_id">
+			<Table name="promotion"></Table>
+			<Level name="media_type" column="media_type"></Level>
+		</Hierarchy>
+	</Dimension>
+	<!-- 商场维 -->
+	<Dimension name="商场地域" foreignKey="store_id">
+		<Hierarchy hasAll="true" allMemberName="所有商场" primaryKey="store_id">
+			<Table name="store"></Table>
+			<Level name="store_country" column="store_country"></Level>
+			<Level name="store_state" column="store_state"></Level>
+			<Level name="store_city" column="store_city"></Level>
+		</Hierarchy>
+	</Dimension>
+	<!-- 时间维 -->
+	<Dimension name="时间" foreignKey="time_id">
+		<Hierarchy hasAll="true" allMemberName="所有时间" primaryKey="time_id">
+			<Table name="time_by_day"></Table>
+			<Level name="the_year" column="the_year"></Level>			
+			<Level name="quarter" column="quarter"></Level>
+			<Level name="month_of_year" column="month_of_year"></Level>
+			<Level name="the_date" column="the_date"></Level>
+		</Hierarchy>
+	</Dimension>
+	<Measure name="总销售额" column="store_sales" aggregator="sum" datatype="Numeric" />
+	<Measure name="总支出额" column="store_cost" aggregator="sum" datatype="Numeric" />
+	<Measure name="总销售量" column="unit_sales" aggregator="sum" datatype="Numeric"/>
+</Cube>
+</Schema>
